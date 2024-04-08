@@ -1,0 +1,15 @@
+menu "ARMA UI Configuration"
+    choice ARMA_UI
+        prompt "ARMA Gripper UI module"
+        default ARMA_UI_M5Core2
+        help
+            Sets used ARMA Gripper UI module
+
+        config ARMA_UI_M5Core2
+            bool "M5Core2"
+        config ARMA_UI_M5CoreS3
+            bool "M5CoreS3"
+
+    endchoice
+
+endmenu

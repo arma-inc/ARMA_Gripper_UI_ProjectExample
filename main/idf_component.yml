@@ -1,0 +1,12 @@
+## ARMA UI Example IDF Component Manager Manifest File
+description: ARMA UI Example
+version: "0.0.1"
+targets: [esp32, esp32s3]
+license: BSD-1-Clause
+
+dependencies:
+  ## Required IDF version
+  idf:
+    version: ">=5.2.1"
+
+
