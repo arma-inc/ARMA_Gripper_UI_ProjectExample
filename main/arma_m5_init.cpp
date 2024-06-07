@@ -32,16 +32,28 @@
 void arma_m5_init() {
     auto cfg = M5.config();
     M5.begin(cfg);  // initialize M5 device
-    // disable BUS5V Output
-    uint8_t r12 = M5.Power.Axp192.readRegister8(0x12);
-    M5.Power.Axp192.writeRegister8(0x12, r12 & 0xBF);
-    // M5.Power.setChargeCurrent(0);
-    M5.Power.setBatteryCharge(false);
-    // disable charging for sure
-    uint8_t r33 = M5.Power.Axp192.readRegister8(0x33);
-    M5.Power.Axp192.writeRegister8(0x33, r33 & 0x7F);
-    // disable Battery monitoring
-    M5.Power.Axp192.writeRegister8(0x32, 0b00000010);
+    if (M5.Power.getType() == m5::Power_Class::pmic_t::pmic_axp192) {
+        // M5 Core2 v1.0
+
+        // disable BUS5V Output
+        uint8_t r12 = M5.Power.Axp192.readRegister8(0x12);
+        M5.Power.Axp192.writeRegister8(0x12, r12 & 0xBF);
+        // M5.Power.setChargeCurrent(0);
+        M5.Power.setBatteryCharge(false);
+        // disable charging for sure
+        uint8_t r33 = M5.Power.Axp192.readRegister8(0x33);
+        M5.Power.Axp192.writeRegister8(0x33, r33 & 0x7F);
+        // disable Battery monitoring
+        M5.Power.Axp192.writeRegister8(0x32, 0b00000010);
+
+    } else if (M5.Power.getType() == m5::Power_Class::pmic_t::pmic_axp2101) {
+        // M5 Core2 v1.1
+        M5.Power.setBatteryCharge(false);
+        // to enable Boost: AXP_BoostEN >= 1200mV
+        // to enable VOUT-VBUS: AXP_BoostEN <= 400mV
+        M5.Power.Axp2101.setBLDO2(0);  // Boost off
+    }
+
     M5.Power.setLed(0);
 }
 
